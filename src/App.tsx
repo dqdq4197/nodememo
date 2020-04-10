@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import styled,{ThemeProvider} from 'styled-components';
+import {CodeView} from './page';
+import {BrowserRouter ,Route,Switch} from 'react-router-dom';
+import {lightTheme,darkTheme} from './styles/CommonTheme';
 
-function App() {
+
+
+const App = () => {
+  const themeMode = localStorage.getItem('theme');
+  const [theme,setTheme] = useState(themeMode? themeMode:'DarkMode');
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ThemeProvider
+      theme={theme ==='DarkMode' ? darkTheme : lightTheme}>
+    <BrowserRouter >
+      <AppSwitch />
+    </BrowserRouter >
+    </ThemeProvider>
+  )
 }
 
+
+function AppSwitch() {
+  return (
+    <>
+      <Switch>
+        <Route path="/codeview" component={CodeView} />
+      </Switch>
+    </>
+  )
+}
 export default App;
