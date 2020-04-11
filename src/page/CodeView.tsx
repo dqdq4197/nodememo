@@ -1,11 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-
+import CodeViewTemplate from '../components/CodeView/CodeViewTemplate';
+import CodeViewContainer from '../containers/CodeViewContainer';
 
 const CodeView = () => {
     return (
-        <>
-        </>
+        <CodeViewTemplate>
+            <CodeViewContainer/>
+        </CodeViewTemplate>
     )
 }
 
