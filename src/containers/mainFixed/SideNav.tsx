@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import NavIconBlock from '../../components/SideNav/NavIconBlock';
 
 const NavBlock = styled.div`
     position:fixed;
+    display:flex;
+    align-items:center;
     width:60px;
     height:100vh;
     border-top-right-radius: 20px;
@@ -14,7 +16,9 @@ const NavBlock = styled.div`
 `
 const SideNav = () => {
     return (
-        <NavBlock/>
+        <NavBlock>
+            <NavIconBlock/>
+        </NavBlock>
     )   
 }
 

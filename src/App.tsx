@@ -1,11 +1,12 @@
 import React from 'react';
 import {ThemeProvider} from 'styled-components';
-import {CodeView} from './page';
-import {BrowserRouter ,Route,Switch} from 'react-router-dom';
+import {CodeView,Home} from './page';
+import {BrowserRouter ,Route,Switch, useLocation} from 'react-router-dom';
 import {lightTheme,darkTheme} from './styles/CommonTheme';
 import {useSelector} from 'react-redux';
 import {RootState} from './modules';
 import CommonTemplate from './containers/mainFixed/CommonTemplate';
+import './App.css';
 
 
 
@@ -14,8 +15,8 @@ const App = () => {
   return (
     <ThemeProvider
       theme={mode ==='DarkMode' ? darkTheme : lightTheme}>
-      <CommonTemplate/>
       <BrowserRouter >
+        <CommonTemplate/>
         <AppSwitch />
       </BrowserRouter >
     </ThemeProvider>
@@ -24,10 +25,13 @@ const App = () => {
 
 
 function AppSwitch() {
+  const location = useLocation();
   return (
     <>
-      <Switch>
+      <Switch location={location}>
+        <Route path="/" exact component={Home}/>
         <Route path="/codeview" component={CodeView} />
+
       </Switch>
     </>
   )

@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux';
 import theme from './theme';
+import codememo from './codememo';
 
 const rootReducer = combineReducers({
-    theme
+    theme,
+    codememo
 });
 
 export default rootReducer;
