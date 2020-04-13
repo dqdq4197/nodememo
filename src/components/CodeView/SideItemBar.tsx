@@ -1,6 +1,7 @@
-import React,{useMemo} from 'react';
+import React from 'react';
 import styled,{keyframes} from 'styled-components';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import {Link} from 'react-router-dom';
 import {Input} from '../Common/Input';
 
 const SideSlideIn = keyframes`
@@ -33,6 +34,7 @@ const AddItemBlock = styled.div`
     padding-left:30px;
 
 `
+
 const AddItemBtn = styled.button`
     display:flex;
     align-items: center;
@@ -89,6 +91,7 @@ const ItemListBlock = styled.div`
     border-radius:.5rem;
     margin:10px auto;
     padding-left:20px;
+    cursor:pointer;
     &:after {
         left: 0;
         position: absolute;
@@ -110,18 +113,17 @@ type ItemProps = {
     addItem: () => void;
     isAddItem:boolean;
     addInput:React.MutableRefObject<any>;
-    onChangeAddItemName: React.ChangeEventHandler<HTMLInputElement>; 
-    addItemName: string;
     onEnterAddItem:React.KeyboardEventHandler<HTMLInputElement>;
     memoArray: MemoListState[],
 }
 
-const SideItemBar = ({addItem,isAddItem,addInput, onChangeAddItemName,addItemName,onEnterAddItem,memoArray}:ItemProps) => {
-
-
-    const itemList: React.ReactElement[] = memoArray.map(
+const SideItemBar = ({addItem,isAddItem,addInput,onEnterAddItem,memoArray}:ItemProps) => {
+//  memoArray.filter((item,index) => memoArray.findIndex(i => i.name === item.name) === index )
+    const itemList: React.ReactElement[] =memoArray.map(
         item => (
-          <ItemListBlock key={item.name}>{item.name}</ItemListBlock>
+            <Link to={`/codeview/${item.name}`} key={item.name}>
+              <ItemListBlock >{item.name}</ItemListBlock>
+            </Link>
         )
     );
 
@@ -133,9 +135,9 @@ const SideItemBar = ({addItem,isAddItem,addInput, onChangeAddItemName,addItemNam
                     <AddCircleOutlineIcon className="icon" />
                 </AddItemBtn>
                 <AddItem isShow={isAddItem}>
-                    <InputStyle ref={addInput} onKeyDown={onEnterAddItem} onChange={onChangeAddItemName} value={addItemName} width="100%" height="100%" bgcolor="black"/>
+                    <InputStyle ref={addInput} onKeyDown={onEnterAddItem} width="100%" height="100%" bgcolor="black"/>
                 </AddItem>
-                {itemList}
+                {itemList}          
             </AddItemBlock>
         </SideBlock>
 

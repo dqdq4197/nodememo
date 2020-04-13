@@ -1,14 +1,14 @@
-import React,{useState ,useRef} from 'react';
-import SideItemBar from '../components/CodeView/SideItemBar';
-import CodeEditor from '../components/CodeView/CodeEditor';
+import React,{useState ,useRef, useCallback} from 'react';
+import SideItemBar from '../../components/CodeView/SideItemBar';
+import CodeEditor from '../../components/CodeView/CodeEditor';
 import styled from 'styled-components';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../modules';
-import {additem} from '../modules/codememo';
+import {RootState} from '../../modules';
+import {additem} from '../../modules/codememo';
 import html from 'highlight.js/lib/languages/xml';
 import hljs from 'highlight.js';
 import javascript from 'highlight.js/lib/languages/javascript';
-import 'highlight.js/styles/atelier-cave-dark.css';
+import 'highlight.js/styles/tomorrow-night-bright.css';
 hljs.registerLanguage('html', html);
 hljs.registerLanguage('javascript', javascript);
 
@@ -35,7 +35,6 @@ const CodeViewContainer = () => {
     const {Items} = useSelector((state:RootState)=> state.codememo);
     const [code,setCode] = useState('');
     const [isAddItem, setIsAddItem] = useState(false);
-    const [addItemName, setAddItemName] = useState("");
     const addInput = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
     
@@ -48,34 +47,45 @@ const CodeViewContainer = () => {
       }
 
     //  Item 추가/ 변경 /삭제 함수
-    const addItem = () => {
+    const addItem = useCallback(() => {
         setIsAddItem(true);
         if (!addInput.current) {
             return;
         };
         addInput.current.focus();
-    }
-    const onChangeAddItemName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAddItemName(e.target.value);
-        
-    }
+    },[]);
+
     const onEnterAddItem = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if(e.keyCode === 13) {
-            dispatch(additem(addItemName));
+        if(e.keyCode === 13 && addInput.current) {
+            const value = addInput.current.value;
+            dispatch(additem(value));
+            // if(Items){
+            //     const key = Items.find(item=> item.name===value)
+            //     if(key) {
+            //     } else {
+            //         window.alert('nope');
+            //         dispatch(additem(value));
+            //     }
+            // } else{
+            //     dispatch(additem(value));
+            // }       
         }
     }
+
     return (
-        <CodeViewBlock id="ddd">
+        <CodeViewBlock>
             <SideItemBar
                 memoArray={Items} 
                 addItem={addItem} 
                 isAddItem={isAddItem} 
-                addInput={addInput} 
-                addItemName={addItemName} 
-                onChangeAddItemName={onChangeAddItemName}
+                addInput={addInput}
                 onEnterAddItem ={onEnterAddItem}
             />
-            <CodeEditor code={code} onCodeChange={onCodeChange} ></CodeEditor>
+            <CodeEditor
+                code={code} 
+                onCodeChange={onCodeChange}
+                memoArray={Items}
+            />
             <SideViewBlock/>
         </CodeViewBlock>
     )

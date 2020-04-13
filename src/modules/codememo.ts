@@ -15,32 +15,94 @@ type MemoAction =
     | ReturnType<typeof addmemo>
 
 
-type CodeMemoState = {
+export type CodeMemoState = {
     Items: [{
         name:string,
-        memo?: {
+        memo?: [{
             number:number,
             about?: {
                 title?:string,
                 content?:string
             },
             code?: string
-        }
-    },
-    ]
+        },{
+            number:number,
+            about?: {
+                title?:string,
+                content?:string
+            },
+            code?: string
+        }]
+    }]
 }
 
-const initalState:CodeMemoState ={
+const initalState:CodeMemoState = {
     Items: [{
         name:'React HOC',
-        memo: {
+        memo: [{
             number:1,
             about: {
-                title: 'Input Hoc',
+                title: 'React Hoc',
                 content:'input을 조금더 편하게 사용할 수 있는 훅입니다.'
             },
-            code: `const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {  e.preventDefault();  onSubmit(form);  setForm({    name: '',    description: ''  });  if (!inputRef.current) {    return;  }  inputRef.current.focus();};`    
-        }
+            code: `const MemoList = useCallback(() => {
+    const path = location.pathname.replace(/\/codeview\//,'');
+    const memoArr = memoArray.filter(item => item.name===path);
+    console.log(memoArr)
+    return memoArr.map(value => 
+        <>
+            <ContentBlock >
+                <h2>{value.memo.about.title}</h2>
+                <p>{value.memo.about.content}</p>
+            </ContentBlock>
+            <CodeBlock >{value.memo.code}</CodeBlock>
+        </>
+    )
+},[location.pathname])`
+        },{
+            number:2,
+            about: {
+                title: 'React Input Hoc',
+                content:'input을 조금더 편하게 사용할 수 있는 훅입니다. 재사용성을 높여줍니다.'
+            },
+            code: `const CodeList = ({memoArray}:ListProps) => {
+    const location = useLocation();
+
+    useEffect(() => {
+        pushCode();
+    })
+    const memoList = useMemo(() => {
+        const path = location.pathname.replace(/\/codeview\//,'');
+        const memoArr = memoArray.filter(item => item.name===path);
+        return memoArr.map(value => 
+            <GridBlock key={value.memo.number}>
+                <ContentBlock >
+                    <h2>{value.memo.about.title}</h2>
+                    <p>{value.memo.about.content}</p>
+                </ContentBlock>
+                <CodeBlock >
+                    <pre><code className="language-jsx">{value.memo.code}</code></pre>
+                </CodeBlock>
+            </GridBlock>
+        )
+        
+    },[location.pathname])
+
+    const pushCode = () => {
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
+    }
+  
+    return (
+        <>
+            {memoList}\
+        </>
+    )
+}
+
+export default CodeList;`  
+        }]
     }]
 }
 
@@ -48,10 +110,9 @@ const initalState:CodeMemoState ={
 export default function codememo (state: CodeMemoState = initalState, action: MemoAction ){
     switch (action.type) {
         case ADDITEM :
-            return {
-                ...state,
-                Items: state.Items.concat({name: action.payload}),
-            }
+            return state.Items.concat({
+                name:action.payload,
+            })
         case ADDMEMO :
             return {
                 ...state

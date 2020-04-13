@@ -1,8 +1,8 @@
 import React from 'react';
 import CodeViewTemplate from '../components/CodeView/CodeViewTemplate';
-import CodeViewContainer from '../containers/CodeViewContainer';
+import CodeViewContainer from '../containers/CodeView/CodeViewContainer';
 
-const CodeView = () => {
+const CodeViewPage = () => {
     return (
         <CodeViewTemplate>
             <CodeViewContainer/>
@@ -10,4 +10,4 @@ const CodeView = () => {
     )
 }
 
-export default CodeView;
+export default CodeViewPage;

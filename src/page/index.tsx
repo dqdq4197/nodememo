@@ -1,2 +1,2 @@
-export {default as CodeView} from './CodeView';
-export {default as Home}  from './Home';
+export {default as CodeViewPage} from './CodeViewPage';
+export {default as HomePage}  from './HomePage';

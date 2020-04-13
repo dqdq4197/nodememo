@@ -7,6 +7,7 @@ const Container = styled.div`
     z-index:999;
     width:100px;
     height:30px;
+    margin-right:20px;
     p {
         text-align:center;     
         transition:color .7s;

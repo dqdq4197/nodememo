@@ -8,7 +8,7 @@ export const darkTheme = {
         sideItemBarbgcolor:'#161922',
         sideItembgcolor:'black',
         sideItemAfter:'#60f',
-        bgcolor:'#3d3b3d',
+        bgcolor:'#27292c',
         sideCodeViewBgcolor:'rgb(21, 21, 21)',
     },
     palette: {

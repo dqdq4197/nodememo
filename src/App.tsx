@@ -1,6 +1,6 @@
 import React from 'react';
 import {ThemeProvider} from 'styled-components';
-import {CodeView,Home} from './page';
+import {CodeViewPage,HomePage} from './page';
 import {BrowserRouter ,Route,Switch, useLocation} from 'react-router-dom';
 import {lightTheme,darkTheme} from './styles/CommonTheme';
 import {useSelector} from 'react-redux';
@@ -29,8 +29,8 @@ function AppSwitch() {
   return (
     <>
       <Switch location={location}>
-        <Route path="/" exact component={Home}/>
-        <Route path="/codeview" component={CodeView} />
+        <Route path="/" exact component={HomePage}/>
+        <Route path="/codeview" component={CodeViewPage} />
 
       </Switch>
     </>

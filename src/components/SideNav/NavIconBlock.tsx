@@ -31,8 +31,7 @@ type StyledProps = {
 const NavIconBlock = () => {
 
     const location = useLocation();
-    const path = location.pathname.replace(/\//g,'');
-    console.log(path)
+    const path = location.pathname.match(/\/codeview/) ? 'codeview' : 'home';
     return (
         <IconBlock path={path}>
             <Link to ="/" ><HomeIcon className="icon home"/></Link>

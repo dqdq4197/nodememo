@@ -7,7 +7,7 @@ const HomeBlock = styled.div`
     background:${({theme}) => theme.bgcolor};
 `
 
-const Home = () => {
+const HomePage = () => {
     return (
         <HomeBlock>
 
@@ -15,4 +15,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default HomePage;

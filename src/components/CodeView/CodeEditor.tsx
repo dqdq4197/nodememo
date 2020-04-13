@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import CodeList from './CodeList';
 import {Input, TextArea} from '../Common/Input';
+
+
+
 const EditorBlock = styled.div`
     width:100%;
     height:auto;
@@ -18,6 +22,7 @@ const CodeBlock = styled.div`
 const CodeEditBlock = styled.div`
     position:relative;
     z-index:1;
+    grid-column-start: 2;
 `
 
 const CodeEdit = styled.textarea`
@@ -40,6 +45,7 @@ const CodeNote = styled.div`
 `
 const CodeContent = styled.div`
     position:relative;
+    grid-column-start: 1;
     width:500px;
     height:300px;
     border-radius:50px;
@@ -50,15 +56,17 @@ const CodeContent = styled.div`
         height:100%;
         background:#60f;
         border-radius:200px;
-        
     }
 `
+
+
 type CodeEditorProps = {
     code:string;
     onCodeChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    memoArray:[];
 }
 
-const CodeEditor = ({code,onCodeChange}:CodeEditorProps) => {
+const CodeEditor = ({code,onCodeChange,memoArray}:CodeEditorProps) => {
     return (
         <EditorBlock>
             <CodeBlock>
@@ -72,6 +80,7 @@ const CodeEditor = ({code,onCodeChange}:CodeEditorProps) => {
                     <CodeNote id='code' style={{color:'white'}}/>
                 </CodeEditBlock>
             </CodeBlock>
+                <CodeList memoArray={memoArray}/>
         </EditorBlock>
     )
 }
