@@ -3,6 +3,7 @@ import styled,{keyframes} from 'styled-components';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {Link} from 'react-router-dom';
 import {Input} from '../Common/Input';
+import {CodeMemoType} from '../../modules/codememo';
 
 const SideSlideIn = keyframes`
     from {
@@ -106,20 +107,18 @@ const ItemListBlock = styled.div`
 type StyledProps = {
     isShow:boolean;
 }
-type MemoListState = {
-    name:string,
-}
+
 type ItemProps = {
     addItem: () => void;
     isAddItem:boolean;
     addInput:React.MutableRefObject<any>;
     onEnterAddItem:React.KeyboardEventHandler<HTMLInputElement>;
-    memoArray: MemoListState[],
+    memoArray: CodeMemoType[],
 }
 
 const SideItemBar = ({addItem,isAddItem,addInput,onEnterAddItem,memoArray}:ItemProps) => {
-//  memoArray.filter((item,index) => memoArray.findIndex(i => i.name === item.name) === index )
-    const itemList: React.ReactElement[] =memoArray.map(
+    
+    const itemList: React.ReactElement[] =memoArray.filter((item,index) => memoArray.findIndex(i => i.name === item.name) === index ).map(
         item => (
             <Link to={`/codeview/${item.name}`} key={item.name}>
               <ItemListBlock >{item.name}</ItemListBlock>

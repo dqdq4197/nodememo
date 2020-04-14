@@ -16,6 +16,9 @@ export const Input = styled.input.attrs(props => ({
         outline:none;
         background:${({theme}) => theme.Common.inputFocusBgColor}; 
     }
+    &:hover {
+      background:${({theme}) => theme.Common.inputFocusBgColor};
+    }
     width:${props => props.width || '55%' };
     background:${props => props.bgcolor || 'transparent'};
     margin: ${props => props.margin || '0rem'};
@@ -39,8 +42,11 @@ export const Input = styled.input.attrs(props => ({
     border-radius: 10px;
     font-weight:bold;
     &:focus { 
-        outline:none;
-        background:${({theme}) => theme.Common.inputFocusBgColor}; 
+      outline:none;
+      background:${({theme}) => theme.Common.inputFocusBgColor}; 
+    }
+    &:hover {
+      background:${({theme}) => theme.Common.inputFocusBgColor};
     }
     width:${props => props.width || '55%' };
     background:transparent;

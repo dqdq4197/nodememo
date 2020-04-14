@@ -14,30 +14,41 @@ type MemoAction =
     | ReturnType<typeof additem>
     | ReturnType<typeof addmemo>
 
-
-export type CodeMemoState = {
-    Items: [{
-        name:string,
-        memo?: [{
-            number:number,
-            about?: {
-                title?:string,
-                content?:string
-            },
-            code?: string
-        },{
-            number:number,
-            about?: {
-                title?:string,
-                content?:string
-            },
-            code?: string
-        }]
-    }]
+export type MemoType = {
+    number:number,
+    about:{
+        title:string,
+        content:string
+    },
+    code:string
 }
 
-const initalState:CodeMemoState = {
-    Items: [{
+export type CodeMemoType = {
+    name: string;
+    memo: MemoType[];
+};
+
+export type CodeMemoState= CodeMemoType[];
+// export type CodeMemoState = [{
+//     name:string,
+//     memo?: [{
+//         number:number,
+//         about?: {
+//             title?:string,
+//             content?:string
+//         },
+//         code?: string
+//     },{
+//         number:number,
+//         about?: {
+//             title?:string,
+//             content?:string
+//         },
+//         code?: string
+//     }]
+// }]
+
+const initalState:CodeMemoState = [{
         name:'React HOC',
         memo: [{
             number:1,
@@ -103,15 +114,15 @@ const initalState:CodeMemoState = {
 
 export default CodeList;`  
         }]
-    }]
-}
+}]
 
 
 export default function codememo (state: CodeMemoState = initalState, action: MemoAction ){
     switch (action.type) {
         case ADDITEM :
-            return state.Items.concat({
+            return state.concat({
                 name:action.payload,
+                memo:[]
             })
         case ADDMEMO :
             return {

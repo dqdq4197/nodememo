@@ -2,7 +2,8 @@ import React,{useMemo,useEffect} from 'react';
 import styled,{keyframes} from 'styled-components';
 import {useLocation} from 'react-router-dom';
 import hljs from 'highlight.js';
-
+import {CodeMemoType} from '../../modules/codememo';
+import {device} from '../../styles/MediaHoc';
 
 const fadeInView = keyframes`
     from {
@@ -10,14 +11,6 @@ const fadeInView = keyframes`
     }
     to {
         opacity:1;
-    }
-`
-const fadeOut = keyframes`
-    from {
-        opacity:1;
-    }
-    to {
-        opacity:0;
     }
 `
 
@@ -36,6 +29,7 @@ const CodeBlock = styled.div`
     grid-column-start: 2;
     overflow:hidden;
     font-size:14px;
+    
     .hljs {
         background:transparent;
     }
@@ -87,6 +81,14 @@ const CodeBlock = styled.div`
         background: rgba(255, 255, 255, 0);
            
     }
+    @media ${device.laptop} {
+        code.hljs {
+            max-width:100%;
+            background:${({theme}) => theme.codeView.sideCodeViewBgcolor};
+            border-radius:8px;
+            padding:20px;
+        }
+    }
 
 `
 
@@ -96,20 +98,13 @@ const GridBlock = styled.div`
     column-gap: 100px;
     padding-right: 80px;
     grid-template-columns: 1fr 1fr;
+    @media ${device.laptop} {
+        display:block;
+    }
 `
-type MemoArrayState ={
-    name:string,
-    memo: [{
-        number:number,
-        about: {
-            title:string,
-            content?:string
-        },
-        code?: string
-    }]
-}
+
 type ListProps = {
-    memoArray:MemoArrayState[]
+    memoArray:CodeMemoType[]
 }
 const CodeList = ({memoArray}:ListProps) => {
     
@@ -121,12 +116,10 @@ const CodeList = ({memoArray}:ListProps) => {
     const memoList = useMemo(() => {
         const path = location.pathname.replace(/\/codeview\//,'');
         const memoArr = memoArray.filter(item => item.name===path);
-        console.log(memoArr[0])
         
-        if(!memoArr[0]) return ;
-
-        if(memoArr[0].hasOwnProperty('memo')) {
+        if(memoArr) {
             return memoArr.map(item => item.memo.map(value => 
+                value.hasOwnProperty('number') ?
                 <GridBlock key={value.number}>
                     <ContentBlock >
                         <h2>{value.about.title}</h2>
@@ -135,25 +128,11 @@ const CodeList = ({memoArray}:ListProps) => {
                     <CodeBlock>
                         <pre className="language-jsx"><code className="language-jsx">{value.code}</code></pre>
                     </CodeBlock>
-                </GridBlock>
+                </GridBlock> : null
             ))
+            
         }
-
-        //     )   
-        // }
-        // return memoArr.map(value => 
-        //     <GridBlock key={value.memo.number}>
-        //         <ContentBlock >
-        //             <h2>{value.memo.about.title}</h2>
-        //             <p>{value.memo.about.content}</p>
-        //         </ContentBlock>
-        //         <CodeBlock>
-        //             <pre className="language-jsx"><code className="language-jsx">{value.memo.code}</code></pre>
-        //         </CodeBlock>
-        //     </GridBlock>
-        // )
-        
-    },[location.pathname])
+    },[location.pathname,memoArray])
 
     const pushCode = () => {
         document.querySelectorAll('pre code').forEach((block) => {
