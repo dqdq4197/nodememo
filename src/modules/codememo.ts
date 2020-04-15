@@ -1,13 +1,20 @@
 const ADDITEM = 'codememo/ADDITEM' as const;
 const ADDMEMO = 'codememo/ADDMEMO' as const;
 
+
 export const additem = (name:string) => ({
     type:ADDITEM,
     payload:name,
 })
 
-export const addmemo = () => ({
-    type:ADDMEMO
+export const addmemo = (name:string, title:string,content:string,code:string) => ({
+    type:ADDMEMO,
+    payload:{
+        name,
+        title,
+        content,
+        code
+    }
 })
 
 type MemoAction = 
@@ -125,9 +132,20 @@ export default function codememo (state: CodeMemoState = initalState, action: Me
                 memo:[]
             })
         case ADDMEMO :
-            return {
-                ...state
-            }
+            return state.map(value =>
+                value.name === action.payload.name ? 
+                    {
+                        ...value,
+                     memo: value.memo.concat({
+                         number:value.memo.length+1,
+                         about:{
+                             title:action.payload.title,
+                             content:action.payload.content
+                         },
+                         code:action.payload.code
+                     }),
+                     } : value
+            )
         default : 
             return state       
     }

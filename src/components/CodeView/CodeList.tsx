@@ -79,7 +79,6 @@ const CodeBlock = styled.div`
     pre code::-webkit-scrollbar, pre code::-webkit-scrollbar-thumb {
         border-radius: 10px;
         background: rgba(255, 255, 255, 0);
-           
     }
     @media ${device.laptop} {
         code.hljs {
@@ -98,6 +97,7 @@ const GridBlock = styled.div`
     column-gap: 100px;
     padding-right: 80px;
     grid-template-columns: 1fr 1fr;
+    word-break: keep-all;
     @media ${device.laptop} {
         display:block;
     }
@@ -116,6 +116,7 @@ const CodeList = ({memoArray}:ListProps) => {
     const memoList = useMemo(() => {
         const path = location.pathname.replace(/\/codeview\//,'');
         const memoArr = memoArray.filter(item => item.name===path);
+        
         
         if(memoArr) {
             return memoArr.map(item => item.memo.map(value => 

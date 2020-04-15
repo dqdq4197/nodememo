@@ -3,8 +3,9 @@ import SideItemBar from '../../components/CodeView/SideItemBar';
 import CodeEditor from '../../components/CodeView/CodeEditor';
 import styled from 'styled-components';
 import {useDispatch, useSelector} from 'react-redux';
+import {useLocation,useHistory} from 'react-router-dom';
 import {RootState} from '../../modules';
-import {additem} from '../../modules/codememo';
+import {additem,addmemo} from '../../modules/codememo';
 import SnackBarUi from '../../components/Common/SnackBarUi';
 import {device} from '../../styles/MediaHoc';
 import html from 'highlight.js/lib/languages/xml';
@@ -37,14 +38,17 @@ const SideViewBlock = styled.aside`
 `
 
 const CodeViewContainer = () => {
-    const Items = useSelector((state:RootState)=> state.codememo);
-    // const [code,setCode] = useState('');
+    const Items = useSelector((state:RootState)=> state.codememo)
     const [isAddItem, setIsAddItem] = useState(false);
     const [isOpenSnackBar,setIsOpenSnackBar] = useState({open:false,reload:false});
     const [isShowPreView, setIsShowPreView] = useState(false);
     const addInput = useRef<HTMLInputElement>(null);
     const codeRef = useRef<HTMLInputElement>(null);
+    const titleRef = useRef<HTMLInputElement>(null);
+    const contentRef = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
+    const location = useLocation();
+    const history = useHistory();
     
 
     // 코드 미리보기 
@@ -56,14 +60,7 @@ const CodeViewContainer = () => {
         setIsShowPreView(!isShowPreView)
         console.log(isShowPreView)
     },[isShowPreView])
-    // Code 변경함수
 
-    // const onCodeChange = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
-    //     setCode(e.target.value);
-    //     const code1 = hljs.highlightAuto(e.target.value).value;
-    //     const codeBlock = document.getElementById('code') as HTMLDivElement
-    //     codeBlock.innerHTML = `<pre><code className"hljs>${code1}</code></pre>`;
-    //   }
 
     //  Item 추가/ 변경 /삭제 함수
     const addItem = useCallback(() => {
@@ -83,9 +80,11 @@ const CodeViewContainer = () => {
                     setIsOpenSnackBar({open:true,reload:!isOpenSnackBar.reload});
                 } else {
                     dispatch(additem(value));
+                    history.push(`/codeview/${value}`);
                 }
             } else{
                 dispatch(additem(value));
+                history.push(`/codeview/${value}`);
             }       
         }
     }
@@ -93,7 +92,13 @@ const CodeViewContainer = () => {
     const OpenSnack = useCallback(() => (
         <SnackBarUi ok={isOpenSnackBar.open} message={'이미 생성된 키워드입니다.'}/>
       ),[isOpenSnackBar])
-      
+    
+    const onSaveMemo = useCallback(() => {
+        const name= location.pathname.replace(/\/codeview\//,'');
+        console.log(name)
+        if(titleRef.current && contentRef.current && codeRef.current)
+            dispatch(addmemo(name,titleRef.current.value,contentRef.current.value,codeRef.current.value));
+    },[location])
     return (
         <CodeViewBlock>
             <SideItemBar
@@ -108,6 +113,9 @@ const CodeViewContainer = () => {
                 codeRef={codeRef}
                 onPreView={onPreView}
                 isShow={isShowPreView}
+                onSave={onSaveMemo}
+                titleRef={titleRef}
+                contentRef={contentRef}
             />
             <SideViewBlock/>
             <OpenSnack/>
