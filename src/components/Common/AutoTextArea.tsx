@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import TextareaAutosize from 'react-textarea-autosize';
+import {device} from '../../styles/MediaHoc';
 
 const AutoSizeTextArea = styled(TextareaAutosize)`
         overflow:hidden;
-        color: ${({theme}) => theme.palette.basic};
+        color: ${props => props.color || props.theme.palette.basic};
         font-size: ${(props:StyledProps) => props.fontSize || '1rem'};
         border:none;
         border-radius: 10px;
@@ -41,19 +42,20 @@ const AutoSizeTextArea = styled(TextareaAutosize)`
 // padding:${(props:StyledProps) => props.padding || '30px'};
 
 interface StyledProps {
-    fontSize?:string;
-    width?:string;
-    size?:string;
-    padding?:string;
-    leftmargin?:string;
+  color?:string;
+  fontSize?:string;
+  width?:string;
+  size?:string;
+  padding?:string;
+  leftmargin?:string;
 }
 
 interface TextAreaProps extends StyledProps {
-    Ref?:React.MutableRefObject<any>;
-    placeholder?:string;
+  Ref?:React.MutableRefObject<any>;
+  placeholder?:string;
     
 }
-const AutoTextArea = ({Ref,placeholder,width,fontSize,leftmargin}:TextAreaProps) => {
+const AutoTextArea = ({Ref,placeholder,width,fontSize,leftmargin,color}:TextAreaProps) => {
 
 
 
@@ -63,6 +65,7 @@ const AutoTextArea = ({Ref,placeholder,width,fontSize,leftmargin}:TextAreaProps)
                 leftmargin={leftmargin}
                 placeholder={placeholder}
                 inputRef={Ref}
+                color={color}
             />
 }
 

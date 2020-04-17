@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import {useDispatch, useSelector} from 'react-redux';
 import {useLocation,useHistory} from 'react-router-dom';
 import {RootState} from '../../modules';
-import {additem,addmemo} from '../../modules/codememo';
+import {additem,addmemo,removememo} from '../../modules/codememo';
 import SnackBarUi from '../../components/Common/SnackBarUi';
 import {device} from '../../styles/MediaHoc';
 import html from 'highlight.js/lib/languages/xml';
@@ -39,8 +39,8 @@ const SideViewBlock = styled.aside`
 
 const CodeViewContainer = () => {
     const Items = useSelector((state:RootState)=> state.codememo)
-    const [isAddItem, setIsAddItem] = useState(false);
-    const [isOpenSnackBar,setIsOpenSnackBar] = useState({open:false,reload:false});
+    const [isAddItem, setIsAddItem] = useState({isShow:false,isAni:false});
+    const [isOpenSnackBar,setIsOpenSnackBar] = useState({open:false,reload:false,message:''});
     const [isShowPreView, setIsShowPreView] = useState(false);
     const addInput = useRef<HTMLInputElement>(null);
     const codeRef = useRef<HTMLInputElement>(null);
@@ -61,44 +61,77 @@ const CodeViewContainer = () => {
         console.log(isShowPreView)
     },[isShowPreView])
 
+    //코드메모 삭제
+    const onrRemoveCode = useCallback((name,number) => {
+        dispatch(removememo(name,number))
+    },[])
+
+    //코드메모 저장
+    const onSaveMemo = useCallback(() => {
+        const name= location.pathname.replace(/\/codeview\//,'');
+        
+        if(titleRef.current && contentRef.current && codeRef.current){
+            if(!titleRef.current.value) {
+                titleRef.current.focus();
+                return ;
+            }   
+            if(!codeRef.current.value) {
+                codeRef.current.focus();
+                return;
+            }
+            return dispatch(addmemo(name,titleRef.current.value,contentRef.current.value,codeRef.current.value));
+        }
+    },[location,dispatch])
 
     //  Item 추가/ 변경 /삭제 함수
     const addItem = useCallback(() => {
-        setIsAddItem(true);
+        setIsAddItem({
+            isShow:true,
+            isAni:!isAddItem.isAni,
+        });
+        if(isAddItem.isShow) {
+            setTimeout(() => setIsAddItem({isAni:!isAddItem.isAni,isShow:false}),200);
+        }
         if (!addInput.current) {
             return;
-        };
-        addInput.current.focus();
-    },[]);
+        };  
+        addInput.current.focus();   
+    },[isAddItem]);
+
 
     const onEnterAddItem = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if(e.keyCode === 13 && addInput.current) {
             const value = addInput.current.value;
+            if(!value) {
+                setIsOpenSnackBar({open:true,reload:!isOpenSnackBar.reload,message:'키워드를 입력해주세요!'});
+                return;
+            }
             if(Items){
-                const key = Items.find(item=> item.name===value)
+                const key = Items.find(item=> item.name.toLowerCase()===value.toLowerCase())
                 if(key) {
-                    setIsOpenSnackBar({open:true,reload:!isOpenSnackBar.reload});
+                    setIsOpenSnackBar({open:true,reload:!isOpenSnackBar.reload,message:'이미 생성된 키워드입니다.'});
                 } else {
                     dispatch(additem(value));
+                    setIsAddItem({isAni:!isAddItem.isAni,isShow:false});
+                    addInput.current.value='';
                     history.push(`/codeview/${value}`);
                 }
             } else{
                 dispatch(additem(value));
+                setIsAddItem({isAni:!isAddItem.isAni,isShow:false});
+                addInput.current.value='';
                 history.push(`/codeview/${value}`);
             }       
         }
     }
 
     const OpenSnack = useCallback(() => (
-        <SnackBarUi ok={isOpenSnackBar.open} message={'이미 생성된 키워드입니다.'}/>
+        <SnackBarUi ok={isOpenSnackBar.open} message={isOpenSnackBar.message}/>
       ),[isOpenSnackBar])
     
-    const onSaveMemo = useCallback(() => {
-        const name= location.pathname.replace(/\/codeview\//,'');
-        console.log(name)
-        if(titleRef.current && contentRef.current && codeRef.current)
-            dispatch(addmemo(name,titleRef.current.value,contentRef.current.value,codeRef.current.value));
-    },[location])
+
+
+
     return (
         <CodeViewBlock>
             <SideItemBar
@@ -116,6 +149,7 @@ const CodeViewContainer = () => {
                 onSave={onSaveMemo}
                 titleRef={titleRef}
                 contentRef={contentRef}
+                onRemoveMemo ={onrRemoveCode}
             />
             <SideViewBlock/>
             <OpenSnack/>

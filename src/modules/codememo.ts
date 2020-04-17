@@ -1,6 +1,6 @@
 const ADDITEM = 'codememo/ADDITEM' as const;
 const ADDMEMO = 'codememo/ADDMEMO' as const;
-
+const REMOVEMEMO = 'codememo/REMOVEMEMO' as const;
 
 export const additem = (name:string) => ({
     type:ADDITEM,
@@ -17,9 +17,18 @@ export const addmemo = (name:string, title:string,content:string,code:string) =>
     }
 })
 
+export const removememo = (name:string,number:number) => ({
+    type:REMOVEMEMO,
+    payload:{
+        name,
+        number
+    }
+})
+
 type MemoAction = 
     | ReturnType<typeof additem>
     | ReturnType<typeof addmemo>
+    | ReturnType<typeof removememo>
 
 export type MemoType = {
     number:number,
@@ -137,7 +146,7 @@ export default function codememo (state: CodeMemoState = initalState, action: Me
                     {
                         ...value,
                      memo: value.memo.concat({
-                         number:value.memo.length+1,
+                         number:value.memo.length>0 ? value.memo[value.memo.length-1].number+1 : 1,
                          about:{
                              title:action.payload.title,
                              content:action.payload.content
@@ -146,6 +155,15 @@ export default function codememo (state: CodeMemoState = initalState, action: Me
                      }),
                      } : value
             )
+            case REMOVEMEMO : 
+                return (
+                    state.map(value =>
+                        value.name===action.payload.name ? {
+                            ...value,
+                            memo: value.memo.filter(number => number.number !== action.payload.number)
+                        } : value 
+                    )   
+                )
         default : 
             return state       
     }

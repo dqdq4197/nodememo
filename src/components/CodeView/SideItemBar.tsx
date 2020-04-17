@@ -1,5 +1,5 @@
 import React from 'react';
-import styled,{keyframes} from 'styled-components';
+import styled,{keyframes,css} from 'styled-components';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {Link} from 'react-router-dom';
 import {Input} from '../Common/Input';
@@ -13,7 +13,14 @@ const SideSlideIn = keyframes`
         transform:translateX(0);
     }
 `
-
+const SideSlideOut = keyframes`
+    from {
+        transform:translateX(0);
+    }
+    to {
+        transform:translateX(-200px);
+    }
+`
 const SideBlock = styled.aside`
     position:fixed;
     width:250px;
@@ -64,7 +71,7 @@ const InputStyle = styled(Input) `
     overflow:hidden;
     width:90%;
     &::after {
-        content:"d";
+        content:"";
         width:3px;
         height:300px;
         background:${({theme}) => theme.palette.purple};
@@ -74,14 +81,20 @@ const AddItem = styled.div`
     width:80%;
     margin:20px auto;
     height:40px;
-    display: ${({isShow}:StyledProps) => isShow ? 'block': 'none'}; 
+    display: ${({isShow}:StyledProps) => isShow.isShow ? 'block': 'none'}; 
     border-radius:.3rem;
     animation-duration: 0.2s;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
-    animation-name: ${SideSlideIn};
+    ${({isShow}) => isShow.isAni ? 
+        css`
+            animation-name: ${SideSlideIn}`:
+        css`
+            animation-name: ${SideSlideOut}
+        `
+    }
 `
-const ItemListBlock = styled.div`
+const Item = styled.div`
     position:relative;
     display:flex;
     align-items:center;
@@ -90,7 +103,7 @@ const ItemListBlock = styled.div`
     background:${({theme}) => theme.codeView.sideItembgcolor};
     color:white;
     border-radius:.5rem;
-    margin:10px auto;
+    margin:10px auto 5px;
     padding-left:20px;
     cursor:pointer;
     &:after {
@@ -104,13 +117,23 @@ const ItemListBlock = styled.div`
     }
     transition: .2s;
 `
+const ItemListBlock = styled.div`
+    display:flex;
+    flex-direction:column-reverse;
+`
 type StyledProps = {
-    isShow:boolean;
+    isShow:{
+        isShow:boolean;
+        isAni:boolean;
+    };
 }
 
 type ItemProps = {
     addItem: () => void;
-    isAddItem:boolean;
+    isAddItem:{
+        isShow:boolean;
+        isAni:boolean;
+    };
     addInput:React.MutableRefObject<any>;
     onEnterAddItem:React.KeyboardEventHandler<HTMLInputElement>;
     memoArray: CodeMemoType[],
@@ -121,7 +144,7 @@ const SideItemBar = ({addItem,isAddItem,addInput,onEnterAddItem,memoArray}:ItemP
     const itemList: React.ReactElement[] =memoArray.filter((item,index) => memoArray.findIndex(i => i.name === item.name) === index ).map(
         item => (
             <Link to={`/codeview/${item.name}`} key={item.name}>
-              <ItemListBlock >{item.name}</ItemListBlock>
+              <Item >{item.name}</Item>
             </Link>
         )
     );
@@ -136,7 +159,9 @@ const SideItemBar = ({addItem,isAddItem,addInput,onEnterAddItem,memoArray}:ItemP
                 <AddItem isShow={isAddItem}>
                     <InputStyle ref={addInput} onKeyDown={onEnterAddItem} width="100%" height="100%" bgcolor="black"/>
                 </AddItem>
-                {itemList}          
+                <ItemListBlock>
+                    {itemList}          
+                </ItemListBlock>
             </AddItemBlock>
         </SideBlock>
 

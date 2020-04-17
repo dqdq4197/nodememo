@@ -2,6 +2,8 @@ import React,{useMemo,useEffect} from 'react';
 import styled,{keyframes} from 'styled-components';
 import {useLocation} from 'react-router-dom';
 import hljs from 'highlight.js';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import EditIcon from '@material-ui/icons/Edit';
 import {CodeMemoType} from '../../modules/codememo';
 import {device} from '../../styles/MediaHoc';
 
@@ -15,6 +17,7 @@ const fadeInView = keyframes`
 `
 
 const ContentBlock = styled.div`
+    display:flex;
     color:${({theme}) => theme.palette.basic};
     grid-column-start: 1;
     transition:color .2s;
@@ -22,6 +25,29 @@ const ContentBlock = styled.div`
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
     animation-name:${fadeInView};
+    .util {
+        display: flex;
+        flex-direction: column;
+        margin:27px 20px 0 0;
+        color:${({theme}) => theme.palette.lightPurple};
+        svg {
+            margin-bottom:10px;
+            transition:color .3s;
+        }
+        svg:nth-child(1) {
+            &:hover {
+                color:#ea0b0b;
+            }
+        }
+        svg:nth-child(2) {
+            &:hover {
+                color:${({theme}) => theme.palette.basic};
+            }
+        }
+    }
+    p {
+        font-weight:500;
+    }
 `
 
 const CodeBlock = styled.div`
@@ -46,6 +72,9 @@ const CodeBlock = styled.div`
         height: 100%;
         background: linear-gradient(to left, #151515, rgba(21, 21, 21, 0));
         pointer-events: none;
+        @media ${device.laptop} {
+            display:none;
+        }
     }
     
     code {
@@ -97,16 +126,23 @@ const GridBlock = styled.div`
     column-gap: 100px;
     padding-right: 80px;
     grid-template-columns: 1fr 1fr;
+    grid-auto-flow:dense;
     word-break: keep-all;
     @media ${device.laptop} {
         display:block;
+        padding-right:40px;
     }
 `
-
+const ListBlock = styled.div`
+    display:flex;
+    flex-direction:column-reverse
+    
+`
 type ListProps = {
-    memoArray:CodeMemoType[]
+    memoArray:CodeMemoType[];
+    onRemoveMemo:(name:string,number:number)=> void;
 }
-const CodeList = ({memoArray}:ListProps) => {
+const CodeList = ({memoArray, onRemoveMemo}:ListProps) => {
     
     const location = useLocation();
 
@@ -122,9 +158,15 @@ const CodeList = ({memoArray}:ListProps) => {
             return memoArr.map(item => item.memo.map(value => 
                 value.hasOwnProperty('number') ?
                 <GridBlock key={value.number}>
-                    <ContentBlock >
-                        <h2>{value.about.title}</h2>
-                        {value.about.content ? <p>{value.about.content}</p> : null}
+                    <ContentBlock>
+                        <div className="util">
+                            <RemoveCircleOutlineIcon onClick={()=>onRemoveMemo(path,value.number)}/>
+                            <EditIcon/>
+                        </div>
+                        <div>
+                            <h2>{value.about.title}</h2>
+                            {value.about.content ? <p>{value.about.content}</p> : null}
+                        </div>
                     </ContentBlock>
                     <CodeBlock>
                         <pre className="language-jsx"><code className="language-jsx">{value.code}</code></pre>
@@ -142,9 +184,9 @@ const CodeList = ({memoArray}:ListProps) => {
     }
   
     return (
-        <>
+        <ListBlock>
             {memoList}
-        </>
+        </ListBlock>
     )
 }
 

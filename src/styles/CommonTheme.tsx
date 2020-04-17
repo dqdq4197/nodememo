@@ -4,6 +4,10 @@ export const darkTheme = {
     bgcolorEven:"#161922",
     bgtoggle: "white",
     sidebarbgcolor:"#2d2e41",
+    home: {
+        motionBgcolor:"#333",
+        motionColor:"rgba(255,255,255,.2)",
+    },
     codeView: {
         sideItemBarbgcolor:'#161922',
         sideItembgcolor:'black',
@@ -27,6 +31,10 @@ export const lightTheme = {
     bgcolorEven:"#fff",
     bgtoggle:"gray",
     sidebarbgcolor:"#60f",
+    home: {
+        motionBgcolor:"mediumslateblue",
+        motionColor:"rgba(255,255,255,.6)",
+    },
     codeView: {
         sideItemBarbgcolor:'#7659ff',
         sideItembgcolor:'#1e1e1e4a',

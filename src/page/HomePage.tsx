@@ -1,17 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
+import HomeTemplate from '../components/Home/HomeTemplate';
+import HomeContainer from '../containers/Home/HomeContainer';
 
-const HomeBlock = styled.div`
-    width:100%;
-    min-height:100vh;
-    background:${({theme}) => theme.bgcolor};
-`
+
+
+
 
 const HomePage = () => {
     return (
-        <HomeBlock>
-
-        </HomeBlock>
+        <HomeTemplate>
+            <HomeContainer />
+        </HomeTemplate>
     )
 }
 

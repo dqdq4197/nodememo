@@ -31,7 +31,7 @@ const Header = () => {
     }
     
     return (
-        <HeaderBlock>
+        <HeaderBlock style={{zIndex:999}}>
             <ThemeToggle onChangeTheme={onChangeTheme} isChange={isChange} active={mode}/>
         </HeaderBlock>
     )

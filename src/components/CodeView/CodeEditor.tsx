@@ -5,13 +5,20 @@ import {Input} from '../Common/Input';
 import {CodeMemoType} from '../../modules/codememo';
 import AutoTextArea from '../Common/AutoTextArea';
 import {CustomBtn} from '../Common/CustomButton';
+import {device} from '../../styles/MediaHoc';
 
 
 const EditorBlock = styled.div`
-    width:100%;
+    max-width:100%;
     height:auto;
     padding-left:300px;
     padding-top:80px;
+    padding-bottom:50px;
+    margin-left: auto;
+    margin-right: auto;
+    @media ${device.laptop} {
+        max-width:calc(100% - 300px);
+    }
 `
 
 const CodeBlock = styled.div`
@@ -19,6 +26,9 @@ const CodeBlock = styled.div`
     column-gap: 100px;
     grid-template-columns: 1fr 1fr;
     margin-bottom: 18px;
+    @media ${device.laptop} {
+        display:block;
+    }
 `
 
 const CodeEditBlock = styled.div<StyledProps>`
@@ -106,9 +116,10 @@ type CodeEditorProps = {
     onSave:() => void;
     contentRef:React.MutableRefObject<any>;
     titleRef:React.MutableRefObject<any>;
+    onRemoveMemo:(name:string,number:number) =>void;
 }
 
-const CodeEditor = ({onPreView,memoArray,codeRef,isShow,onSave,titleRef,contentRef}:CodeEditorProps) => {
+const CodeEditor = ({onPreView,memoArray,codeRef,isShow,onSave,titleRef,contentRef,onRemoveMemo}:CodeEditorProps) => {
     return (
         <EditorBlock>
             <div style={{paddingRight:"80px"}}>
@@ -119,7 +130,7 @@ const CodeEditor = ({onPreView,memoArray,codeRef,isShow,onSave,titleRef,contentR
                         <AutoTextArea Ref={contentRef} placeholder="CONTENT" fontSize="16px" leftmargin="1rem"/>
                     </CodeContent>
                     <CodeEditBlock isShow={isShow}>
-                        <AutoTextArea Ref={codeRef} placeholder={'코드를 입력해보세요!'}/>
+                        <AutoTextArea Ref={codeRef} color={'white'} placeholder={'코드를 입력해보세요!'}/>
                         <CodeNote id='code' isShow={isShow} style={{color:'white'}}/>
                     </CodeEditBlock>
                 </CodeBlock>
@@ -128,7 +139,7 @@ const CodeEditor = ({onPreView,memoArray,codeRef,isShow,onSave,titleRef,contentR
                     <ReCustomBtn onClick={onPreView}>미리보기</ReCustomBtn>
                 </UtilBlock>
             </div>
-                <CodeList memoArray={memoArray}/>
+                <CodeList memoArray={memoArray} onRemoveMemo={onRemoveMemo}/>
         </EditorBlock>
     )
 }
