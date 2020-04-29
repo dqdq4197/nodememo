@@ -11,27 +11,38 @@ class App {
   constructor(port: number) {
     this.app = express();
     this.port = port;
-    this.loader();
-    this.router();
-    this.listen();
+    (async () => {
+      try {
+        await this.loader(); // 모듈 로딩
+        await this.router(); // 라우터 셋팅
+        await this.listen(); // 서버 시작
+      } catch (error) {
+        console.error(error.message);
+      }
+    })();
   }
 
-  private router() {
-    this.app.use("/api", routes());
+  private async loader() {
+    this.app.use(hpp());
+    this.app.use(helmet());
+    this.app.use(morgan("dev"));
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+  }
+
+  private async router() {
+    this.app.use("/api", routes()); // 라우터 등록
+    this.app.get("/favicon.ico", (req, res) => {
+      // favicon.ico throw err 막기
+      res.status(204);
+    });
     this.app.use((req, res, next) => {
       let err = new Error("Not found");
       next(err);
     });
   }
-  private loader() {
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(hpp());
-    this.app.use(helmet());
-    this.app.use(morgan("dev"));
-  }
 
-  private listen() {
+  private async listen() {
     this.app.listen(this.port, () => {
       console.log(`App listening on the port ${this.port}`);
     });

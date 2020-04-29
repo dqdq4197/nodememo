@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --forceExit"
+    "test": "jest --detectOpenHandles --forceExit",
+    "dev": "npx ts-node ./src/app.ts"
   },
   "author": "",
   "license": "ISC",
