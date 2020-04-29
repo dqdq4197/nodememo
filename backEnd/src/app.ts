@@ -3,23 +3,27 @@ import * as morgan from "morgan";
 import * as hpp from "hpp";
 import * as helmet from "helmet";
 import routes from "./api/routes";
+import config from "./configs";
+import logger from "./utils/logger";
 
 class App {
   private app: express.Application;
-  private port: number;
 
   constructor(port: number) {
     this.app = express();
-    this.port = port;
     (async () => {
       try {
+        await this.setting(); // 익스프레스 셋팅
         await this.loader(); // 모듈 로딩
         await this.router(); // 라우터 셋팅
         await this.listen(); // 서버 시작
       } catch (error) {
-        console.error(error.message);
+        logger.error(error.message);
       }
     })();
+  }
+  private async setting() {
+    this.app.set("port", config.port);
   }
 
   private async loader() {
@@ -43,8 +47,8 @@ class App {
   }
 
   private async listen() {
-    this.app.listen(this.port, () => {
-      console.log(`App listening on the port ${this.port}`);
+    this.app.listen(this.app.get("port"), () => {
+      logger.info(`App listening on the port ${this.app.get("port")}`);
     });
   }
 }
