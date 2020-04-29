@@ -1,4 +1,4 @@
-import React,{useState,useEffect, useRef} from 'react';
+import React,{useState, useRef} from 'react';
 import styled from 'styled-components';
 import {CSSTransition} from 'react-transition-group';
 import Dialog from '../Common/Dialog';
@@ -34,7 +34,6 @@ const HeaderBlock = styled.div`
         height:2px;
         width:50%;
         background:black;
-        left: ${(props:StyledProps) => props.isMove && props.purpose === 'signIn' ? '50%' : null};
     }
     .${(props:StyledProps) => props.purpose} {
         color:black;
@@ -97,22 +96,17 @@ const InputBlock = styled.div`
 
 type StyledProps = {
     purpose:string;
-    isMove:boolean;
 };
 
 const SignInBtn = () => {
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState(true);
     const [purpose, setPurpose] = useState('signIn');
-    const [isMove, setIsMove] = useState(false);
     const [bodyHeight, setBodyHeight] = useState(121);
     const underLineRef = useRef<HTMLDivElement>(null);
-    
-    
-    
+
     const onCancel = () => {
         setVisible(false);
         setPurpose('signIn');
-        setIsMove(false);
     }
     const onSignIn = () => {
         
@@ -122,13 +116,11 @@ const SignInBtn = () => {
 
     }
     const onClickButton = () => {
-        // const root = document.getElementById('body');
-        // if(root) root?.setAttribute('style','overflow-y:hidden');
         return setVisible(true);
     }
 
     const FormDialog = () => (
-            <HeaderBlock isMove={isMove} purpose={purpose}>
+            <HeaderBlock purpose={purpose}>
                 <h3 className="signIn" onClick={MoveSignIn}>SignIn</h3>
                 <h3 className="signUp" onClick={MoveSignUp}>SignUp</h3>
                 <div ref={underLineRef} className="underLine"></div>
@@ -146,9 +138,11 @@ const SignInBtn = () => {
         var id = setInterval(frame, 10);
         function frame() {
           if (pos === 0) {
+            
             clearInterval(id);
           } else {
             pos-=2.5;
+            console.log(pos);
             if(underLineRef.current)
             underLineRef.current.style.left = pos + '%';
           }
@@ -157,7 +151,6 @@ const SignInBtn = () => {
 
     function MoveSignUp() {
         let pos:number;
-        setIsMove(true)
         setPurpose('signUp');
         if(purpose === 'signIn') {
             pos = 0;

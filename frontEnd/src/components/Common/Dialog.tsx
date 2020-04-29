@@ -127,7 +127,6 @@ function Dialog({height, title, children,confirmText, onConfirm, cancelText, vis
           setTimeout(() => setAnimate(false), 250);
         }
         setLocalVisible(visible);
-        
     }, [localVisible, visible]);
     
   if (!animate && !localVisible) return null;
