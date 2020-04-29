@@ -26,3 +26,9 @@ $ npm install
 ```shell
 $ npm run dev
 ```
+
+### 자바스크립트로 컴파일 후 서버 시작
+```shell
+$ npm run build // open dist
+$ npm start
+```
