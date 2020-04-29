@@ -1,10 +1,10 @@
 class UserService {
   constructor() {}
-  public login() {}
-  public register() {}
-  public account() {}
-  public accountModify() {}
-  public secession() {}
+  public async login() {}
+  public async register() {}
+  public async account() {}
+  public async accountModify() {}
+  public async secession() {}
 }
 
 export default new UserService();
