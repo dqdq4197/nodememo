@@ -1,3 +1,4 @@
+import dbConfig from "./dbConfig";
 import * as dotenv from "dotenv";
 const env = dotenv.config();
 
@@ -8,7 +9,7 @@ if (!env) throw new Error("⚠️ Couldn't find .env file ⚠️");
 export default {
   port: process.env.PORT!,
 
-  dbConfig: null,
+  dbConfig,
 
   logs: {
     level: process.env.LOG_LEVEL || "silly",
