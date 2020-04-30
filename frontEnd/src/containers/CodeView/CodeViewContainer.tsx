@@ -80,7 +80,6 @@ const CodeViewContainer = () => {
                 codeRef.current.focus();
                 return;
             }
-            saveContent({id:1,title:titleRef.current.value,content:contentRef.current.value,code:codeRef.current.value}).then(() => console.log('ok'))
             return dispatch(addmemo(name,titleRef.current.value,contentRef.current.value,codeRef.current.value));
         }
     },[location,dispatch])
@@ -113,17 +112,13 @@ const CodeViewContainer = () => {
                 if(key) {
                     setIsOpenSnackBar({open:true,reload:!isOpenSnackBar.reload,message:'이미 생성된 키워드입니다.'});
                 } else {
+                    saveContent({title:addInput.current.value, id:1})
                     dispatch(additem(value));
                     setIsAddItem({isAni:!isAddItem.isAni,isShow:false});
                     addInput.current.value='';
                     history.push(`/codeview/${value}`);
                 }
-            } else{
-                dispatch(additem(value));
-                setIsAddItem({isAni:!isAddItem.isAni,isShow:false});
-                addInput.current.value='';
-                history.push(`/codeview/${value}`);
-            }       
+            }     
         }
     }
 
