@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useLocation,useHistory} from 'react-router-dom';
 import {RootState} from '../../modules';
 import {additem,addmemo,removememo} from '../../modules/codememo';
+import {saveContent} from '../../lib/api/post';
 import SnackBarUi from '../../components/Common/SnackBarUi';
 import {device} from '../../styles/MediaHoc';
 import html from 'highlight.js/lib/languages/xml';
@@ -79,6 +80,7 @@ const CodeViewContainer = () => {
                 codeRef.current.focus();
                 return;
             }
+            saveContent({id:1,title:titleRef.current.value,content:contentRef.current.value,code:codeRef.current.value}).then(() => console.log('ok'))
             return dispatch(addmemo(name,titleRef.current.value,contentRef.current.value,codeRef.current.value));
         }
     },[location,dispatch])

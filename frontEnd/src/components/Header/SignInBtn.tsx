@@ -99,7 +99,7 @@ type StyledProps = {
 };
 
 const SignInBtn = () => {
-    const [visible, setVisible] = useState(true);
+    const [visible, setVisible] = useState(false);
     const [purpose, setPurpose] = useState('signIn');
     const [bodyHeight, setBodyHeight] = useState(121);
     const underLineRef = useRef<HTMLDivElement>(null);
