@@ -2,15 +2,31 @@ import { Router, Request, Response } from 'express'
 import PostService from '../../../services/PostService'
 
 // 라우터
-import test from './test'
+// import test from './test'
 
 const router = Router()
 
 export default (app: Router) => {
   app.use('/posts', router)
-  router.post('/add', async (req, res) => {
-    if (await PostService.add(req.body)) res.status(200).json({ success: true, message: '추가 성공' })
-    else res.status(400).json({ success: false, message: '실패' })
+
+  router.post('/', async (req, res) => {
+    const { title, userId } = req.body
+    const { success, message, statusCode, data } = await PostService.add({ title, userId })
+    res.status(statusCode).json({ success, message, data })
   })
-  test(router)
+
+  router.delete('/:id', async (req, res) => {
+    const { id } = req.params
+    const { success, message, statusCode, data } = await PostService.delete({ id: Number(id) })
+    res.status(statusCode).json({ success, message, data })
+  })
+
+  router.put('/:id', async (req, res) => {
+    const { id } = req.params
+    const { title } = req.body
+    const { success, message, statusCode, data } = await PostService.modify({ id: Number(id), title })
+    res.status(statusCode).json({ success, message, data })
+  })
+
+  // test(router)
 }
