@@ -14,7 +14,6 @@ class User extends Model {
   public readonly id!: number
   public email!: string
   public nickname!: string
-  public userId!: string
   public password!: string
   public provider?: string
   public snsid?: string
@@ -26,16 +25,11 @@ class User extends Model {
 
 User.init(
   {
-    email: {
-      type: DataTypes.STRING(40),
-      allowNull: false,
-      unique: true,
-    },
     nickname: {
       type: DataTypes.STRING(20), // 20글자 이하
       allowNull: false, // 필수
     },
-    userId: {
+    email: {
       type: DataTypes.STRING(20),
       allowNull: false,
       unique: true, // 고유한 값
