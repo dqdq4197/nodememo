@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Application } from 'express'
 import * as morgan from 'morgan'
 import * as hpp from 'hpp'
-import * as cors from 'cors';
+import * as cors from 'cors'
 import * as helmet from 'helmet'
 import * as bodyParser from 'body-parser'
 import { sequelize } from './models'
@@ -40,7 +40,7 @@ class App {
    * * 외부 모듈과 최상위 미들웨어 로더
    */
   private async loader({ expressApp }: { expressApp: Application }): Promise<void> {
-    await sequelize
+    sequelize
       .sync({ force: false })
       .then(() => {
         logger.info('db connected')
@@ -48,7 +48,7 @@ class App {
       .catch(() => {
         logger.error('db error')
       })
-    expressApp.use(cors());
+    expressApp.use(cors())
     expressApp.use(hpp())
     expressApp.use(helmet())
     expressApp.use(morgan('dev'))
