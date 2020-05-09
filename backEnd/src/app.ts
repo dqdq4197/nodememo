@@ -5,6 +5,10 @@ import * as hpp from 'hpp'
 import * as cors from 'cors'
 import * as helmet from 'helmet'
 import * as bodyParser from 'body-parser'
+import * as session from 'express-session'
+import * as sessionStore from 'session-file-store'
+const FileStore = sessionStore(session)
+
 import { sequelize } from './models'
 import routes from './api/routes'
 import config from './configs'
@@ -17,7 +21,7 @@ class App {
     this.app = express()
     ;(async () => {
       try {
-        this.start()
+        await this.start()
       } catch (error) {
         logger.error(error.message)
       }
@@ -48,6 +52,14 @@ class App {
       .catch(() => {
         logger.error('db error')
       })
+    expressApp.use(
+      session({
+        secret: config.sessionSecret,
+        resave: false,
+        saveUninitialized: true,
+        store: new FileStore(),
+      })
+    )
     expressApp.use(cors())
     expressApp.use(hpp())
     expressApp.use(helmet())
