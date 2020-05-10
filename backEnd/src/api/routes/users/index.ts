@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express'
 import UserService from '../../../services/UserService'
+import middlewares from '../../middlewares'
 
 const router = Router()
 
@@ -11,12 +12,13 @@ export default (app: Router) => {
     const { success, message, statusCode } = await UserService.register(req.body)
     res.status(statusCode).json({ success, message })
   })
-  router.post('/login', async (req, res) => {
+  router.post('/login', middlewares.loginProcess, async (req, res) => {
+    res.send('로그인성공 반갑습니다')
     // body: {email, password}
-    const { success, message, statusCode } = await UserService.login(req.body)
-    res.status(statusCode).json({ success, message })
+    // const { success, message, statusCode } = await UserService.login(req.body)
+    // res.status(statusCode).json({ success, message })
   })
-  router.get('/account', async (req, res) => {
+  router.get('/account', middlewares.isLoggedin, async (req, res) => {
     await UserService.account()
     res.status(200).json({ success: true, message: '내정보보기 성공' })
   })
