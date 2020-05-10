@@ -21,7 +21,9 @@ const loginProcess = async (req: Request, res: Response, next: NextFunction) => 
       // 로그인 시켜줘도 됨
       req.session!['is_loggedIn'] = true
       req.session!['nickname'] = user.nickname
-      next()
+      req.session!.save(() => {
+        next()
+      })
     } else {
       // 아이디와 비밀번호를 확인해라
       res.status(401).json({ success: false, message: '이메일과 비밀번호 확인바람' })

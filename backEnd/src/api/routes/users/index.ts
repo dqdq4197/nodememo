@@ -12,15 +12,15 @@ export default (app: Router) => {
     const { success, message, statusCode } = await UserService.register(req.body)
     res.status(statusCode).json({ success, message })
   })
+
   router.post('/login', middlewares.loginProcess, async (req, res) => {
     res.send('로그인성공 반갑습니다')
-    // body: {email, password}
-    // const { success, message, statusCode } = await UserService.login(req.body)
-    // res.status(statusCode).json({ success, message })
   })
+
   router.get('/account', middlewares.isLoggedin, async (req, res) => {
-    await UserService.account()
-    res.status(200).json({ success: true, message: '내정보보기 성공' })
+    res.send(`${req.session!.nickname} : 로그인 되어있음`)
+    // await UserService.account()
+    // res.status(200).json({ success: true, message: '내정보보기 성공' })
   })
   router.put('/account', async (req, res) => {
     await UserService.accountModify()

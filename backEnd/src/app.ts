@@ -58,6 +58,7 @@ class App {
         resave: false,
         saveUninitialized: true,
         store: new FileStore(),
+        // cookie: { secure: true, maxAge: 60 },
       })
     )
     expressApp.use(cors())

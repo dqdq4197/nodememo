@@ -1,29 +1,26 @@
 import User from '../models/user'
 import * as argon2 from 'argon2'
-import * as passport from 'passport'
-import * as passportLocal from 'passport-local'
-const LocalStrategy = passportLocal.Strategy
 
 class UserService {
   constructor() {}
 
-  /**
-   * * 로그인
-   * @param {email, password}
-   */
-  public async login({ email, password }: { email: string; password: string }) {
-    let result: any
-    try {
-      const user = await User.findOne({ attributes: ['email', 'password'], where: { email } })
-      if (!user) result = { success: false, message: '존재하지 않음', statusCode: 404 }
-      else if (await argon2.verify(user.password, password)) result = { success: true, message: '로그인 성공', statusCode: 200 }
-      else result = { success: false, message: '비밀번호 틀림', statusCode: 404 }
-    } catch (loginErr) {
-      result = { success: false, message: loginErr.message, statusCode: 400 }
-    } finally {
-      return result!
-    }
-  }
+  // /**
+  //  * * 로그인
+  //  * @param {email, password}
+  //  */
+  // public async login({ email, password }: { email: string; password: string }) {
+  //   let result: any
+  //   try {
+  //     const user = await User.findOne({ attributes: ['email', 'password'], where: { email } })
+  //     if (!user) result = { success: false, message: '존재하지 않음', statusCode: 404 }
+  //     else if (await argon2.verify(user.password, password)) result = { success: true, message: '로그인 성공', statusCode: 200 }
+  //     else result = { success: false, message: '비밀번호 틀림', statusCode: 404 }
+  //   } catch (loginErr) {
+  //     result = { success: false, message: loginErr.message, statusCode: 400 }
+  //   } finally {
+  //     return result!
+  //   }
+  // }
 
   /**
    * * 회원가입
