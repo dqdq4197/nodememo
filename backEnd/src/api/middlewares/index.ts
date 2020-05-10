@@ -1,6 +1,6 @@
-import { isLoggedin, passportLoginProcess } from './auth'
+import { isLoggedin, loginProcess } from './auth'
 
 export default {
   isLoggedin,
-  passportLoginProcess,
+  loginProcess,
 }

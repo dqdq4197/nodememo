@@ -21,7 +21,6 @@ const dbConfig: IConfigGroup = {
     host: process.env.DB_HOST!,
     dialect: 'mysql',
     // timezone: 'Asia/Seoul',
-    operatorsAliases: false,
     logging: false,
   },
   test: {

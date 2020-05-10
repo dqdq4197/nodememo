@@ -6,10 +6,7 @@ import * as cors from 'cors'
 import * as helmet from 'helmet'
 import * as bodyParser from 'body-parser'
 import * as session from 'express-session'
-import * as sessionStore from 'session-file-store'
-const FileStore = sessionStore(session)
 import * as passport from 'passport'
-
 import { sequelize } from './models'
 import routes from './api/routes'
 import config from './configs'
@@ -54,15 +51,8 @@ class App {
       .catch(() => {
         logger.error('db error')
       })
-    expressApp.use(
-      session({
-        secret: config.sessionSecret,
-        resave: false, // 기존 세션이 존재하는 경우 다시 저장할 필요가 있는지를 확인
-        saveUninitialized: false, // 초기화되지 않은 세션의 저장 방지
-        store: new FileStore(),
-        cookie: { secure: false },
-      })
-    )
+
+    expressApp.use(session(config.sessionConfig))
     expressApp.use(passport.initialize())
     expressApp.use(passport.session()) // 내부적으로 세션을 사용
     expressApp.use(cors())

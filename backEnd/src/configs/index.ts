@@ -1,4 +1,5 @@
 import dbConfig from './dbConfig'
+import sessionConfig from './sessionConfig'
 import * as dotenv from 'dotenv'
 const env = dotenv.config()
 
@@ -10,6 +11,8 @@ export default {
   port: process.env.PORT!,
 
   dbConfig,
+
+  sessionConfig,
 
   jwtSecret: process.env.JWT_SECRET!,
 

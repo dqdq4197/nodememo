@@ -13,8 +13,19 @@ export default (app: Router) => {
     res.status(statusCode).json({ success, message })
   })
 
-  router.post('/login', middlewares.passportLoginProcess(), async (req, res) => {
+  router.post('/login', middlewares.loginProcess(), async (req, res) => {
     res.send('로그인성공 반갑습니다')
+  })
+
+  router.get('/logout', async (req, res) => {
+    // 세션을 사용할 때
+    req.logOut()
+    // req.session?.destroy((err) => {
+    //   res.status(200).json({ success: true, message: '로그아웃 성공' })
+    // })
+    req.session?.save(() => {
+      res.status(200).json({ success: true, message: '로그아웃 성공' })
+    })
   })
 
   router.get('/account', middlewares.isLoggedin, async (req, res) => {
