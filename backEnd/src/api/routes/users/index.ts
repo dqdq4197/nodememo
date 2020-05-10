@@ -13,12 +13,12 @@ export default (app: Router) => {
     res.status(statusCode).json({ success, message })
   })
 
-  router.post('/login', middlewares.loginProcess, async (req, res) => {
+  router.post('/login', middlewares.passportLoginProcess(), async (req, res) => {
     res.send('로그인성공 반갑습니다')
   })
 
   router.get('/account', middlewares.isLoggedin, async (req, res) => {
-    res.send(`${req.session!.nickname} : 로그인 되어있음`)
+    res.send(`${req.user.nickname} : 로그인 되어있음`)
     // await UserService.account()
     // res.status(200).json({ success: true, message: '내정보보기 성공' })
   })

@@ -20,7 +20,7 @@ const dbConfig: IConfigGroup = {
     database: process.env.DB_DATABASE!,
     host: process.env.DB_HOST!,
     dialect: 'mysql',
-    timezone: '+9:00',
+    // timezone: 'Asia/Seoul',
     operatorsAliases: false,
     logging: false,
   },
@@ -37,7 +37,7 @@ const dbConfig: IConfigGroup = {
     database: process.env.DB_DATABASE!,
     host: process.env.DB_HOST!,
     dialect: 'mysql',
-    timezone: '+9:00',
+    // timezone: '+9:00',
   },
 }
 
