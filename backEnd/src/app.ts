@@ -1,16 +1,21 @@
-import * as express from 'express'
+import dotenv from 'dotenv'
+dotenv.config()
+import express from 'express'
 import { Application } from 'express'
-import * as morgan from 'morgan'
-import * as hpp from 'hpp'
-import * as cors from 'cors'
-import * as helmet from 'helmet'
-import * as bodyParser from 'body-parser'
-import * as session from 'express-session'
-import * as passport from 'passport'
+import morgan from 'morgan'
+import hpp from 'hpp'
+import cors from 'cors'
+import helmet from 'helmet'
+// import  session from 'express-session'
+// import  sessionStore from 'session-file-store'
+// const FileStore = sessionStore(session)
+import passport from 'passport'
+import passportConfig from './configs/passportConfig'
 import { sequelize } from './models'
 import routes from './api/routes'
 import config from './configs'
 import logger from './utils/logger'
+import flash from 'connect-flash'
 
 class App {
   private app: express.Application
@@ -43,26 +48,31 @@ class App {
    */
   private async loader({ expressApp }: { expressApp: Application }): Promise<void> {
     // await 붙여야 비동기가 멈춤
-    await sequelize
-      .sync({ force: false })
-      .then(() => {
-        logger.info('db connected')
-      })
-      .catch(() => {
-        logger.error('db error')
-      })
+    try {
+      await sequelize.sync({ force: false, alter: false })
+    } catch (err) {
+      throw err
+    }
 
-    expressApp.use(session(config.sessionConfig))
-    expressApp.use(passport.initialize())
-    expressApp.use(passport.session()) // 내부적으로 세션을 사용
     expressApp.use(cors())
     expressApp.use(hpp())
     expressApp.use(helmet())
     expressApp.use(morgan('dev'))
     expressApp.use(express.json())
     expressApp.use(express.urlencoded({ extended: true }))
-    expressApp.use(bodyParser.json())
-    expressApp.use(bodyParser.urlencoded({ extended: true }))
+    // expressApp.use(
+    //   session({
+    //     secret: config.sessionSecret!,
+    //     resave: false, // 기존 세션이 존재하는 경우 다시 저장할 필요가 있는지를 확인
+    //     saveUninitialized: true, // 초기화되지 않은 세션의 저장 방지
+    //     store: new FileStore(),
+    //     cookie: { secure: false },
+    //   })
+    // )
+    // expressApp.use(flash()) // 세션 사용할 때만 활성화
+    expressApp.use(passport.initialize())
+    // expressApp.use(passport.session()) // 내부적으로 세션을 사용
+    passportConfig() // passport 전략 구성
   }
 
   /**
@@ -93,8 +103,11 @@ class App {
    */
   public async start(): Promise<void> {
     await this.setting({ expressApp: this.app })
+    logger.info('setting completed')
     await this.loader({ expressApp: this.app })
+    logger.info('load completed')
     await this.router({ expressApp: this.app })
+    logger.info('routing completed')
     await this.listen({ expressApp: this.app })
   }
 }

@@ -1,6 +1,6 @@
-import { isLoggedin, loginProcess } from './auth'
+import { loginProcess, authenticateJwt } from './auth'
 
 export default {
-  isLoggedin,
+  authenticateJwt,
   loginProcess,
 }

@@ -14,13 +14,14 @@
   "dependencies": {
     "argon2": "0.26.2",
     "bluebird": "3.7.2",
+    "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-session": "1.17.1",
     "helmet": "3.22.0",
     "hpp": "0.2.3",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "1.10.0",
     "mysql2": "2.1.0",
     "passport": "0.4.1",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@types/bluebird": "3.5.30",
+    "@types/connect-flash": "0.0.35",
     "@types/cors": "^2.8.6",
     "@types/express": "4.17.6",
     "@types/express-session": "1.17.0",
