@@ -15,7 +15,7 @@ import { sequelize } from './models'
 import routes from './api/routes'
 import config from './configs'
 import logger from './utils/logger'
-import flash from 'connect-flash'
+// import flash from 'connect-flash'
 
 class App {
   private app: express.Application

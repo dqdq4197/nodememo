@@ -18,6 +18,7 @@ export default () => {
       {
         usernameField: 'email',
         passwordField: 'password',
+        session: false,
       },
       async (email, password, done) => {
         try {
@@ -35,9 +36,9 @@ export default () => {
   passport.use(
     new JwtStrategy(jwtOptions, async (payload, done) => {
       try {
-        const user = await User.findOne({ where: { id: payload.id } })
+        const user = await User.findOne({ attributes: { exclude: ['password'] }, where: { id: payload.id } })
         if (!user) return done(null, false)
-        done(null, user)
+        else return done(null, user)
       } catch (err) {
         done(err, false)
       }
