@@ -1,8 +1,10 @@
+import { Service } from 'typedi'
 import User from '../models/user'
 import argon2 from 'argon2'
 import crypto from 'crypto'
 
-class UserService {
+@Service()
+export default class UserService {
   constructor() {}
 
   /**
@@ -102,5 +104,3 @@ class UserService {
     }
   }
 }
-
-export default new UserService()

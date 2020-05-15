@@ -1,6 +1,9 @@
+import { Service } from 'typedi'
 import Post from '../models/post'
 import Logger from '../utils/logger'
-class PostService {
+
+@Service()
+export default class PostService {
   constructor() {}
 
   /**
@@ -57,5 +60,3 @@ class PostService {
     }
   }
 }
-
-export default new PostService()

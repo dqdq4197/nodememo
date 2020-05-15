@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { Container } from 'typedi'
 import logger from '../../../utils/logger'
 import UserService from '../../../services/UserService'
 
@@ -14,7 +15,8 @@ export default (app: Router) => {
   router.put('/', async (req, res) => {
     const { id } = req.user!
     const { nickname, provider, snsid } = req.body
-    const { success, message, statusCode } = await UserService.modifyAccount({ id, nickname, provider, snsid })
+    const UserServiceInstance = Container.get(UserService)
+    const { success, message, statusCode } = await UserServiceInstance.modifyAccount({ id, nickname, provider, snsid })
     if (!success) logger.error(message)
 
     res.status(statusCode).json({ success, message })
@@ -23,7 +25,8 @@ export default (app: Router) => {
   router.put('/email', async (req, res) => {
     const { id } = req.user!
     const { email } = req.body
-    const { success, message, statusCode } = await UserService.modifyEmail({ id, email })
+    const UserServiceInstance = Container.get(UserService)
+    const { success, message, statusCode } = await UserServiceInstance.modifyEmail({ id, email })
     if (!success) logger.error(message)
 
     res.status(statusCode).json({ success, message })
@@ -32,7 +35,8 @@ export default (app: Router) => {
   router.put('/password', async (req, res) => {
     const { id } = req.user!
     const { password } = req.body
-    const { success, message, statusCode } = await UserService.modifyPassword({ id, password })
+    const UserServiceInstance = Container.get(UserService)
+    const { success, message, statusCode } = await UserServiceInstance.modifyPassword({ id, password })
     if (!success) logger.error(message)
 
     res.status(statusCode).json({ success, message })
@@ -41,7 +45,8 @@ export default (app: Router) => {
   router.delete('/secession', async (req, res) => {
     const { id } = req.user!
     const { password } = req.body
-    const { success, message, statusCode } = await UserService.secession({ id, rawPassword: password })
+    const UserServiceInstance = Container.get(UserService)
+    const { success, message, statusCode } = await UserServiceInstance.secession({ id, rawPassword: password })
     if (!success) logger.error(message)
 
     res.status(statusCode).json({ success, message })

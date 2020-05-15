@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { Container } from 'typedi'
 import middlewares from '../../middlewares'
 import UserService from '../../../services/UserService'
 
@@ -10,7 +11,8 @@ export default (app: Router) => {
   router.post('/login', middlewares.loginProcess)
   router.post('/register', async (req, res) => {
     // body: {nickname, email, password}
-    const { success, message, statusCode } = await UserService.register(req.body)
+    const UserServiceInstance = Container.get(UserService)
+    const { success, message, statusCode } = await UserServiceInstance.register(req.body)
     res.status(statusCode).json({ success, message })
   })
 }
