@@ -4,7 +4,6 @@ import Post from '../models/post'
 @Service()
 export default class PostService {
   constructor() {}
-
   /**
    * * 포스트 조회
    * TODO: 페이지네이션(10개 포스트) 적용
