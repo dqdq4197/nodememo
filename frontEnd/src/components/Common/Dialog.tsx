@@ -108,7 +108,7 @@ interface ChildProps {
     confirmText:string;
     visible:boolean;
     onCancel: () => void;
-    onConfirm: () => void;
+    onConfirm: (e:React.MouseEvent<Element, MouseEvent>) => void;
     disappear?: boolean;
 }
 type styleProps = {
@@ -138,8 +138,8 @@ function Dialog({height, title, children,confirmText, onConfirm, cancelText, vis
                     {title}
                     {children}
                     <ButtonGroup>
-                      <ShortMaginBtn color="pink" onClick={onConfirm}>{confirmText}</ShortMaginBtn>
-                      <ShortMaginBtn color="pink" onClick={onCancel}>{cancelText}</ShortMaginBtn>
+                      <ShortMaginBtn onClick={onConfirm}>{confirmText}</ShortMaginBtn>
+                      <ShortMaginBtn onClick={onCancel}>{cancelText}</ShortMaginBtn>
                     </ButtonGroup>
                   </ContentBlock>
                </DialogBlock>

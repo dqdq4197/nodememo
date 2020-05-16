@@ -1,9 +1,9 @@
-import React,{useState, useRef} from 'react';
+import React,{useState, useRef, ChangeEvent} from 'react';
 import styled from 'styled-components';
 import {CSSTransition} from 'react-transition-group';
 import Dialog from '../Common/Dialog';
 import {Input} from '../Common/Input';
-
+import {signIn,signUp} from '../../lib/api/auth';
 
 
 const Button = styled.button`
@@ -102,23 +102,24 @@ const SignInBtn = () => {
     const [visible, setVisible] = useState(false);
     const [purpose, setPurpose] = useState('signIn');
     const [bodyHeight, setBodyHeight] = useState(121);
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState('');
+    const [nickname,setNickname] = useState('');
     const underLineRef = useRef<HTMLDivElement>(null);
+    const SignInFormRef = useRef<HTMLFormElement>(null);
 
     const onCancel = () => {
         setVisible(false);
         setPurpose('signIn');
     }
-    const onSignIn = () => {
-        
-    }
-
-    const onSignUp = () => {
-
-    }
     const onClickButton = () => {
         return setVisible(true);
     }
-
+    const formReset = () => {
+        setEmail('');
+        setPassword('');
+        setNickname('');
+    }
     const FormDialog = () => (
             <HeaderBlock purpose={purpose}>
                 <h3 className="signIn" onClick={MoveSignIn}>SignIn</h3>
@@ -126,10 +127,19 @@ const SignInBtn = () => {
                 <div ref={underLineRef} className="underLine"></div>
             </HeaderBlock>
     )
+    
+    const onSignIn = (e:React.MouseEvent<Element, MouseEvent>) => {
+        signIn({email,password})
+    }
+
+    const onSignUp = () => {
+        signUp({email,password,nickname})
+    }
 
     function MoveSignIn() {
         let pos:number;
         setPurpose('signIn');
+        formReset()
         if(purpose === 'signUp') {
             pos = 50;
         } else {
@@ -138,7 +148,6 @@ const SignInBtn = () => {
         var id = setInterval(frame, 10);
         function frame() {
           if (pos === 0) {
-            
             clearInterval(id);
           } else {
             pos-=2.5;
@@ -152,6 +161,7 @@ const SignInBtn = () => {
     function MoveSignUp() {
         let pos:number;
         setPurpose('signUp');
+        formReset();
         if(purpose === 'signIn') {
             pos = 0;
         } else {
@@ -173,10 +183,19 @@ const SignInBtn = () => {
     const onCheckHeight = (e:any) => {
         setBodyHeight(e.offsetHeight);
     }
+    
     return( 
         <>
             <Button onClick={onClickButton}>로그인</Button>
-            <Dialog height={bodyHeight} title={<FormDialog/>} onConfirm={purpose==='signIn' ? onSignIn : onSignUp} confirmText={purpose==='signIn' ? '로그인' : '회원가입'} onCancel={onCancel} cancelText={'취소'} visible={visible} >
+            <Dialog
+                height={bodyHeight} 
+                title={<FormDialog/>} 
+                onConfirm={purpose==='signIn' ? onSignIn : onSignUp} 
+                confirmText={purpose==='signIn' ? '로그인' : '회원가입'} 
+                onCancel={onCancel} 
+                cancelText={'취소'} 
+                visible={visible}
+            >
                 <InputBlock style={{height:bodyHeight}}>
                     <CSSTransition 
                         in={purpose === 'signIn'}
@@ -186,8 +205,16 @@ const SignInBtn = () => {
                         onEnter={onCheckHeight}
                     > 
                         <BodyBlock>
-                            <CustomInput name='Email Adress' type="email" paddingLeft="1.4rem" height={'3rem'} />
-                            <CustomInput name='Password' type="password"  paddingLeft="1.4rem" height={'3rem'} />
+                            <form onSubmit={(e) => e.preventDefault()} ref={SignInFormRef}>
+                                <CustomInput 
+                                    name='Email Adress' 
+                                    type="email" 
+                                    value={email} 
+                                    onChange={(e: React.FormEvent<HTMLInputElement>) => setEmail(e.currentTarget.value) } 
+                                    paddingLeft="1.4rem"
+                                    height={'3rem'} />
+                                <CustomInput value={password} onChange={(e: React.FormEvent<HTMLInputElement>) => setPassword(e.currentTarget.value) } name='Password' type="password"  paddingLeft="1.4rem" height={'3rem'} />
+                            </form>
                         </BodyBlock>
                     </CSSTransition>
                     <CSSTransition 
@@ -198,9 +225,11 @@ const SignInBtn = () => {
                         onEnter={onCheckHeight}
                     > 
                         <BodyBlock>
-                            <CustomInput name='Email Adress' type="email" paddingLeft="1.4rem" height={'3rem'} />
-                            <CustomInput name='Password' type="password"  paddingLeft="1.4rem" height={'3rem'} />
-                            <CustomInput name='Nickname' type="password"  paddingLeft="1.4rem" height={'3rem'} />
+                            <form>
+                                <CustomInput value={email} onChange={(e: React.FormEvent<HTMLInputElement>) => setEmail(e.currentTarget.value) } name='Email Adress' type="email" paddingLeft="1.4rem" height={'3rem'} />
+                                <CustomInput value={password} onChange={(e: React.FormEvent<HTMLInputElement>) => setPassword(e.currentTarget.value) } name='Password' type="password"  paddingLeft="1.4rem" height={'3rem'} />
+                                <CustomInput value={nickname} onChange={(e: React.FormEvent<HTMLInputElement>) => setNickname(e.currentTarget.value) } name='Nickname' type="password"  paddingLeft="1.4rem" height={'3rem'} />
+                            </form>
                         </BodyBlock>
                     </CSSTransition>
                 </InputBlock>
