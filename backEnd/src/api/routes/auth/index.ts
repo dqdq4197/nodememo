@@ -11,10 +11,9 @@ export default (app: Router) => {
   app.use('/auth', router)
 
   router.post('/login', middlewares.loginProcess)
+
   router.post('/register', async (req, res) => {
     try {
-      console.log(1)
-
       // body: {nickname, email, password}
       const UserServiceInstance = Container.get(UserService)
       const { success, message, statusCode } = await UserServiceInstance.register(req.body)

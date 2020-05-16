@@ -1,5 +1,6 @@
 import { Service, Inject } from 'typedi'
 import Post from '../models/post'
+import Content from '../models/content'
 
 @Service()
 export default class PostService {
@@ -26,14 +27,17 @@ export default class PostService {
 
   /**
    * * 포스트 상세 조회
+   * TODO: 콘텐츠 모두 보이게
    * @param {postId, userId}
    */
   public async getPost({ postId, userId }: { postId: number; userId: number }): Promise<any> {
     let result: { success: boolean; message: string; statusCode: number; data?: any }
     try {
       const post = await Post.findOne({ where: { id: postId, UserId: userId } })
-      if (post) result = { success: true, message: '포스트 불러오기 성공', statusCode: 200, data: { post } }
-      else result = { success: false, message: '포스트 불러오기 실패', statusCode: 400 }
+      if (post) {
+        const contents = await Content.findAll({ where: { PostId: post.id } })
+        result = { success: true, message: '포스트 불러오기 성공', statusCode: 200, data: { contents } }
+      } else result = { success: false, message: '포스트 불러오기 실패', statusCode: 400 }
     } catch (getListErr) {
       result = { success: false, message: getListErr.message, statusCode: 400 }
     } finally {

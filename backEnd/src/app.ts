@@ -1,4 +1,5 @@
-import 'reflect-metadata'
+import 'reflect-metadata' // typedi
+
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
@@ -70,7 +71,6 @@ class App {
     //     cookie: { secure: false },
     //   })
     // )
-    // expressApp.use(flash()) // 세션 사용할 때만 활성화
     expressApp.use(passport.initialize())
     // expressApp.use(passport.session()) // 내부적으로 세션을 사용
     passportConfig() // passport 전략 구성

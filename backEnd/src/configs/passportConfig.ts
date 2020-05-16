@@ -11,6 +11,7 @@ export default () => {
   const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET!,
+    //
   }
 
   passport.use(

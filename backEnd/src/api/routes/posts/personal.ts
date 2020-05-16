@@ -1,16 +1,15 @@
 import { Router } from 'express'
 import { Container } from 'typedi'
-import middlewares from '../../../middlewares'
-import PostService from '../../../../services/PostService'
-import contents from './contents'
+import middlewares from '../../middlewares'
+import PostService from '../../../services/PostService'
 
-import logger from '../../../../utils/logger'
+import logger from '../../../utils/logger'
 
 const router = Router()
 
 export default (app: Router) => {
   app.use('/personal', middlewares.authenticateJwt, router)
-  contents(router)
+
   // 추가
   router.post('/', async (req, res) => {
     try {
