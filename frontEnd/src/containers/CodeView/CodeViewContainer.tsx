@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useLocation,useHistory} from 'react-router-dom';
 import {RootState} from '../../modules';
 import {additem,addmemo,removememo} from '../../modules/codememo';
-import {saveContent} from '../../lib/api/post';
+import {savePost} from '../../lib/api/post';
 import SnackBarUi from '../../components/Common/SnackBarUi';
 import {device} from '../../styles/MediaHoc';
 import html from 'highlight.js/lib/languages/xml';
@@ -112,7 +112,7 @@ const CodeViewContainer = () => {
                 if(key) {
                     setIsOpenSnackBar({open:true,reload:!isOpenSnackBar.reload,message:'이미 생성된 키워드입니다.'});
                 } else {
-                    saveContent({title:addInput.current.value, id:1})
+                    savePost({title:addInput.current.value, id:1})
                     dispatch(additem(value));
                     setIsAddItem({isAni:!isAddItem.isAni,isShow:false});
                     addInput.current.value='';
