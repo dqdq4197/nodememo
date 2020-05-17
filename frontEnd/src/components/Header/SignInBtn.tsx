@@ -33,7 +33,9 @@ const HeaderBlock = styled.div`
         bottom:0px;
         height:2px;
         width:50%;
+        left:${props => props.purpose === 'signIn' ? 0 :'50%'};
         background:black;
+        transition:.2s;
     }
     .${(props:StyledProps) => props.purpose} {
         color:black;
@@ -140,44 +142,44 @@ const SignInBtn = () => {
         let pos:number;
         setPurpose('signIn');
         formReset()
-        if(purpose === 'signUp') {
-            pos = 50;
-        } else {
-            return ;
-        }
-        var id = setInterval(frame, 10);
-        function frame() {
-          if (pos === 0) {
-            clearInterval(id);
-          } else {
-            pos-=2.5;
-            console.log(pos);
-            if(underLineRef.current)
-            underLineRef.current.style.left = pos + '%';
-          }
-        }
+        // if(purpose === 'signUp') {
+        //     pos = 50;
+        // } else {
+        //     return ;
+        // }
+        // var id = setInterval(frame, 10);
+        // function frame() {
+        //   if (pos === 0) {
+        //     clearInterval(id);
+        //   } else {
+        //     pos-=2.5;
+        //     console.log(pos);
+        //     if(underLineRef.current)
+        //     underLineRef.current.style.left = pos + '%';
+        //   }
+        // }
     }
 
     function MoveSignUp() {
         let pos:number;
         setPurpose('signUp');
         formReset();
-        if(purpose === 'signIn') {
-            pos = 0;
-        } else {
-            return ;
-        }
-        var id = setInterval(frame, 10);
-        function frame() {
-          if (pos === 50) {
-            clearInterval(id);
+        // if(purpose === 'signIn') {
+        //     pos = 0;
+        // } else {
+        //     return ;
+        // }
+        // var id = setInterval(frame, 10);
+        // function frame() {
+        //   if (pos === 50) {
+        //     clearInterval(id);
             
-          } else {
-            pos+=2.5;
-            if(underLineRef.current)
-            underLineRef.current.style.left = pos + '%';
-          }
-        }
+        //   } else {
+        //     pos+=2.5;
+        //     if(underLineRef.current)
+        //     underLineRef.current.style.left = pos + '%';
+        //   }
+        // }
       }
 
     const onCheckHeight = (e:any) => {
